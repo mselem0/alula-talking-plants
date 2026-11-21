@@ -40,5 +40,11 @@
     '<a class="next" href="plant.html?p=' + encodeURIComponent(next.id) + '" rel="next"><span><small>التالية</small>' + O.esc(next.name) + '</span>' + O.icon('next') + '</a>' +
     '<a class="all" href="index.html#plants">' + O.icon('grid') + 'كل النباتات</a></nav>' +
     '</div></div>';
-  O.createPlayer(document.getElementById('player'), p);
+  var root = document.getElementById('player');
+  var api = O.createPlayer(root, p);
+  /* QR codes open this page directly: try to play now, show the tap-to-listen screen if blocked. */
+  O.startWithGesture(api, {
+    root: root, title: p.name, label: 'المس الشاشة لتسمع حكايتي', cta: 'المس الشاشة لتسمع حكايتي',
+    media: O.figure(p, { eager: true, name: false }).replace('class="arch', 'class="tts-arch arch')
+  });
 })();

@@ -1,8 +1,15 @@
 (function () {
   'use strict';
   var O = window.Oasis;
-  O.createPlayer(document.getElementById('welcome'), window.WELCOME);
   var w = document.getElementById('welcome');
+  var wapi = O.createPlayer(w, window.WELCOME);
+  /* Only when arriving from the general entrance QR (?scan=1) */
+  if (new URLSearchParams(location.search).get('scan') === '1') {
+    O.startWithGesture(wapi, {
+      root: w, title: 'حكايات الواحة', label: 'المس الشاشة لتسمع الترحيب', cta: 'المس الشاشة لتسمع الترحيب',
+      media: '<span class="tts-leaf">' + O.icon('sprout') + '</span>'
+    });
+  }
   w.insertAdjacentHTML('afterbegin', '<p class="pt">' + O.icon('volume') + 'اسمع التحية الترحيبية</p>');
 
   function card(p) {

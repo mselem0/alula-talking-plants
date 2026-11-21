@@ -136,9 +136,16 @@
     }
     function pauseOthers() { if (active && active !== api) active.pause(); active = api; }
 
-    var api = { pause: function () { audio.pause(); } };
+    /* play(): call synchronously inside a user gesture. Resolves/rejects like audio.play(). */
+    function play() {
+      pauseOthers(); root.classList.remove('has-error');
+      var pr;
+      try { pr = audio.play(); } catch (e) { pr = Promise.reject(e); }
+      return pr && pr.then ? pr : Promise.resolve();
+    }
+    var api = { pause: function () { audio.pause(); }, play: play };
     btn.addEventListener('click', function () {
-      if (audio.paused) { pauseOthers(); root.classList.remove('has-error'); var pr = audio.play(); if (pr && pr.catch) pr.catch(function () { root.classList.add('has-error'); }); }
+      if (audio.paused) { play().catch(function () { root.classList.add('has-error'); }); }
       else audio.pause();
     });
     audio.addEventListener('play', function () { pauseOthers(); setPlaying(true); cancelAnimationFrame(raf); loop();
@@ -166,5 +173,69 @@
     return api;
   }
 
-  window.Oasis = { icon: icon, esc: esc, figure: figure, placeholder: placeholder, createPlayer: createPlayer, fmt: fmt };
+  /* ---- tap-to-listen start screen ----
+     Browsers block audio without a user gesture. startWithGesture() tries to autoplay; if the browser
+     refuses (NotAllowedError) it shows a full-screen overlay whose tap starts playback. */
+  var ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon points="6 3 20 12 6 21 6 3"/></svg>';
+  function tapToListen(o) {
+    var prevFocus = document.activeElement;
+    var ov = document.createElement('div');
+    ov.className = 'tts';
+    ov.setAttribute('role', 'dialog');
+    ov.setAttribute('aria-modal', 'true');
+    ov.setAttribute('aria-label', o.label);
+    ov.innerHTML =
+      '<div class="tts-in">' +
+      (o.media || '') +
+      '<h2 class="tts-name">' + esc(o.title) + '</h2>' +
+      '<button type="button" class="tts-btn" aria-label="' + esc(o.label) + '"><span class="tts-ring" aria-hidden="true"></span>' + ICON_PLAY + '</button>' +
+      '<p class="tts-cta">' + esc(o.cta) + '</p></div>';
+    var btn = ov.querySelector('.tts-btn');
+    var siblings = Array.prototype.slice.call(document.body.children).filter(function (n) { return n.tagName !== 'SCRIPT'; });
+    siblings.forEach(function (n) { n.setAttribute('inert', ''); });
+    document.body.appendChild(ov);
+    document.body.classList.add('tts-open');
+    try { btn.focus({ preventScroll: true }); } catch (e) { btn.focus(); }
+    var closed = false;
+    function close() {
+      if (closed) return; closed = true;
+      document.removeEventListener('keydown', onKey, true);
+      siblings.forEach(function (n) { n.removeAttribute('inert'); });
+      document.body.classList.remove('tts-open');
+      var done = function () { if (ov.parentNode) ov.parentNode.removeChild(ov); };
+      if (reduced) done(); else { ov.classList.add('is-out'); setTimeout(done, 380); }
+      if (prevFocus && prevFocus.focus && document.contains(prevFocus)) { try { prevFocus.focus({ preventScroll: true }); } catch (e) {} }
+    }
+    function start(e) {
+      if (e) e.preventDefault();
+      /* play() runs synchronously inside the tap/keypress handler so the browser accepts it */
+      o.onStart();
+      close();
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') { e.preventDefault(); close(); }   /* dismiss without playing */
+      else if (e.key === 'Tab') { e.preventDefault(); btn.focus(); } /* single focusable control */
+    }
+    ov.addEventListener('click', start);
+    document.addEventListener('keydown', onKey, true);
+    return { close: close, el: ov };
+  }
+
+  /* Try to autoplay; fall back to the overlay only when the browser blocks it. */
+  function startWithGesture(api, o) {
+    var pr;
+    try { pr = api.play(); } catch (e) { pr = Promise.reject(e); }
+    pr.catch(function (err) {
+      if (err && err.name === 'NotAllowedError') {
+        tapToListen({
+          title: o.title, label: o.label, cta: o.cta, media: o.media,
+          onStart: function () { api.play().catch(function () { var r = o.root; if (r) r.classList.add('has-error'); }); }
+        });
+      } else if (err && err.name !== 'AbortError' && o.root) {
+        o.root.classList.add('has-error');
+      }
+    });
+  }
+
+  window.Oasis = { icon: icon, esc: esc, figure: figure, placeholder: placeholder, createPlayer: createPlayer, fmt: fmt, tapToListen: tapToListen, startWithGesture: startWithGesture };
 })();
