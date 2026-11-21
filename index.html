@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f3ead8">
+<title>حكايات الواحة</title>
+<meta name="description" content="لكل نبتة في العلا حكاية… امسح واستمع">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Reem+Kufi:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="sr-only" href="#main">انتقل إلى المحتوى</a>
+<header class="site-header">
+  <div class="wrap">
+    <div class="bar">
+      <a class="logo-link" href="index.html" aria-label="الهيئة الملكية لمحافظة العلا - الصفحة الرئيسية"><img src="img/rcu-logo-gold.svg" alt="الهيئة الملكية لمحافظة العلا" width="130" height="27"></a>
+      <div class="lang" role="group" aria-label="اللغة">
+        <span class="is-active" lang="ar" aria-current="true">العربية</span>
+        <button type="button" disabled aria-disabled="true" lang="en" aria-label="English، قريبًا">English<em>قريبًا</em></button>
+        <button type="button" disabled aria-disabled="true" lang="fr" aria-label="Français، قريبًا">Français<em>قريبًا</em></button>
+      </div>
+    </div>
+    <div class="brand-row">
+      <span class="leaf"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span><a href="index.html">حكايات الواحة</a>
+    </div>
+  </div>
+  <div class="sadu-band" aria-hidden="true"></div>
+</header>
+<main id="main">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">مشتل العلا</span>
+      <h1>حكايات الواحة</h1>
+      <p class="tag">لكل نبتة في العلا حكاية… امسح واستمع</p>
+    </div>
+    <div class="hero-player" id="welcome" aria-label="التحية الترحيبية"></div>
+  </div>
+</section>
+<div class="wrap" id="plants">
+  <section class="section" aria-labelledby="h-seeds"><div class="section-head"><h2 id="h-seeds">بذور</h2><span class="count" id="c-seeds"></span><span class="rule" aria-hidden="true"></span></div><div class="grid" id="g-seeds"></div></section>
+  <section class="section" aria-labelledby="h-seedlings"><div class="section-head"><h2 id="h-seedlings">شتلات</h2><span class="count" id="c-seedlings"></span><span class="rule" aria-hidden="true"></span></div><div class="grid" id="g-seedlings"></div></section>
+  <noscript><p>يحتاج هذا الموقع إلى تفعيل جافاسكربت.</p></noscript>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="sadu-band" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="logo"><img src="img/rcu-logo-white.svg" alt="الهيئة الملكية لمحافظة العلا" width="162" height="34"></div>
+    <p>حكايات الواحة &middot; مشتل العلا</p>
+    <p><span class="demo">نسخة تجريبية</span></p>
+  </div>
+</footer>
+<script src="data/plants.js"></script>
+<script src="js/common.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

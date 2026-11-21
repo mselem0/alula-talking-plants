@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+"""Build data/plants.js: plant metadata + per-phrase timings from audio.
+
+Usage (from site/):  python3 tools/build_data.py
+Needs ffmpeg/ffprobe. Splits each script at Arabic punctuation, runs
+ffmpeg silencedetect, aligns phrase boundaries to silences in order; when
+counts differ, uses cumulative-character proportion snapped to the nearest
+silence (monotonic).
+"""
+import json, re, subprocess, sys, unicodedata
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+NOISE, MIN_DUR, LEAD = "-35dB", 0.25, 0.06  # highlight starts slightly before speech resumes
+
+def split_phrases(text):
+    parts = re.findall(r"[^،.!؟:؛]+[،.!؟:؛]*", text)
+    return [p.strip() for p in parts if re.search(r"\w", p)]
+
+def weight(p):  # letters only, ignoring tashkeel/punctuation
+    return len([c for c in p if c.isalpha() and unicodedata.category(c) != "Mn"]) or 1
+
+def duration(f):
+    r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                        "-of", "csv=p=0", str(f)], capture_output=True, text=True)
+    return float(r.stdout.strip())
+
+def silences(f, dur):
+    r = subprocess.run(["ffmpeg", "-nostats", "-i", str(f), "-af",
+                        f"silencedetect=noise={NOISE}:d={MIN_DUR}", "-f", "null", "-"],
+                       capture_output=True, text=True)
+    starts = [float(x) for x in re.findall(r"silence_start: ([\d.]+)", r.stderr)]
+    ends = [float(x) for x in re.findall(r"silence_end: ([\d.]+)", r.stderr)]
+    out = []
+    for i, s in enumerate(starts):
+        e = ends[i] if i < len(ends) else dur
+        if s < 0.15 or e >= dur - 0.05:  # leading / trailing silence
+            continue
+        out.append((s, e))
+    return out
+
+def align(phrases, sil, dur):
+    k = len(phrases)
+    if k == 1:
+        return [0.0], "single"
+    speech_start = 0.0
+    speech_end = dur
+    w = [weight(p) for p in phrases]
+    tot = sum(w)
+    exp, c = [], 0
+    for x in w[:-1]:
+        c += x
+        exp.append(speech_start + (speech_end - speech_start) * c / tot)
+    resume = [e for (_, e) in sil]
+    if len(sil) == k - 1:
+        return [0.0] + [max(0, t - LEAD) for t in resume], "exact"
+    # monotonic assignment of silences to boundaries (DP), proportional fallback
+    INF = 1e9
+    nb, ns = k - 1, len(sil)
+    PEN = 2.5
+    # dp[i][j]: boundaries 0..i-1 handled using silences < j
+    dp = [[INF] * (ns + 1) for _ in range(nb + 1)]
+    bk = [[None] * (ns + 1) for _ in range(nb + 1)]
+    dp[0] = [0.0] * (ns + 1)
+    for i in range(1, nb + 1):
+        for j in range(1, ns + 1):
+            best, how = dp[i][j - 1], bk[i][j - 1]
+            if dp[i][j - 1] < INF:
+                how = bk[i][j - 1]
+            cand = dp[i - 1][j - 1] + abs(exp[i - 1] - resume[j - 1])
+            if cand < best:
+                best, how = cand, ("sil", j - 1)
+            dp[i][j], bk[i][j] = best, how
+        # option: boundary i-1 unmatched (proportional)
+        for j in range(ns + 1):
+            cand = dp[i - 1][j] + PEN
+            if cand < dp[i][j]:
+                dp[i][j], bk[i][j] = cand, ("prop", j)
+    # backtrack
+    res = [None] * nb
+    i, j = nb, ns
+    while i > 0:
+        how = bk[i][j]
+        if how is None:
+            res[i - 1] = exp[i - 1]; i -= 1; continue
+        if how[0] == "sil":
+            res[i - 1] = resume[how[1]]; i -= 1; j = how[1]
+        elif how[0] == "prop":
+            res[i - 1] = exp[i - 1]; i -= 1; j = how[1]
+    times = [0.0]
+    for t in res:
+        t = max(t - LEAD, times[-1] + 0.15)
+        times.append(t)
+    return times, f"dp({ns} silences / {nb} boundaries)"
+
+def main():
+    scripts = json.load(open(ROOT / "tools/scripts.json"))
+    meta = json.load(open(ROOT / "tools/plants_meta.json"))
+    plants, report = [], []
+    for e in scripts:
+        pid = e["id"]
+        f = ROOT / "audio" / f"{pid}.mp3"
+        dur = duration(f)
+        ph = split_phrases(e["script"])
+        sil = silences(f, dur)
+        starts, mode = align(ph, sil, dur)
+        rec = {"id": pid, "n": e["n"], "name": e["name"], "cat": e["cat"],
+               "audio": f"audio/{pid}.mp3", "duration": round(dur, 2),
+               "script": e["script"],
+               "phrases": [{"t": p, "s": round(s, 2)} for p, s in zip(ph, starts)]}
+        if pid in meta:
+            m = meta[pid]
+            rec.update({"sci": m["sci"], "sun": m["sun"], "water": m["water"],
+                        "uses": m["uses"], "warning": m["warning"]})
+            if m.get("image"):
+                rec["image"] = m["image"]
+        plants.append(rec)
+        report.append(f'{pid}: dur={dur:.2f} phrases={len(ph)} silences={len(sil)} mode={mode}')
+        if pid == "rosemary":
+            report.append("  rosemary silences (start-end): " + ", ".join(f"{s:.2f}-{e:.2f}" for s, e in sil))
+    welcome = plants[0]
+    rest = plants[1:]
+    js = ("/* Generated by tools/build_data.py - do not edit by hand. "
+          "Set `image` on a plant to use a real character image. */\n"
+          "window.WELCOME = " + json.dumps(welcome, ensure_ascii=False, indent=1) + ";\n"
+          "window.PLANTS = " + json.dumps(rest, ensure_ascii=False, indent=1) + ";\n")
+    (ROOT / "data/plants.js").write_text(js, encoding="utf-8")
+    print("\n".join(report))
+
+if __name__ == "__main__":
+    main()
