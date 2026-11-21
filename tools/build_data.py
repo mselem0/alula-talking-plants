@@ -114,6 +114,8 @@ def main():
                         "uses": m["uses"], "warning": m["warning"]})
             if m.get("image"):
                 rec["image"] = m["image"]
+            if m.get("video"):
+                rec["video"] = m["video"]
         plants.append(rec)
         report.append(f'{pid}: dur={dur:.2f} phrases={len(ph)} silences={len(sil)} mode={mode}')
         if pid == "rosemary":

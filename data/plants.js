@@ -569,7 +569,8 @@ window.PLANTS = [
   "water": "قليل، في تربة لا يتجمّع فيها الماء",
   "uses": "نكهة رائعة للمشويات",
   "warning": false,
-  "image": "img/rosemary.webp"
+  "image": "img/rosemary.webp",
+  "video": "video/rosemary.mp4"
  },
  {
   "id": "itra",
