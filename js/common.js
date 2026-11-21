@@ -27,45 +27,39 @@
     });
   }
 
-  /* ---- character image or elegant placeholder ---- */
+  /* ---- character image or elegant line-art placeholder (single colour strokes, no fills) ---- */
+  var INK = '#14332D', GOLD = '#14332D';
   function leaf(x, y, angle, len) {
     return '<g transform="translate(' + x + ' ' + y + ') rotate(' + angle + ')">' +
-      '<ellipse cx="0" cy="' + (-len / 2) + '" rx="' + (len * 0.3).toFixed(1) + '" ry="' + (len / 2) + '" fill="rgba(27,131,84,.14)" stroke="#1b8354" stroke-width="3"/>' +
-      '<path d="M0 0V' + (-len * 0.9).toFixed(1) + '" stroke="#1b8354" stroke-width="2" fill="none"/></g>';
+      '<ellipse cx="0" cy="' + (-len / 2) + '" rx="' + (len * 0.3).toFixed(1) + '" ry="' + (len / 2) + '" fill="none" stroke="' + INK + '" stroke-width="1.5"/>' +
+      '<path d="M0 0V' + (-len * 0.9).toFixed(1) + '" stroke="' + INK + '" stroke-width="1.5" fill="none"/></g>';
   }
   function placeholder(p, withName) {
     var seeds = p.cat === 'بذور';
     var plant;
     if (seeds) {
-      plant = '<path d="M100 168V118" stroke="#1b8354" stroke-width="3.5" stroke-linecap="round" fill="none"/>' +
+      plant = '<path d="M100 168V118" stroke="' + INK + '" stroke-width="1.5" stroke-linecap="round" fill="none"/>' +
         leaf(100, 132, -52, 52) + leaf(100, 118, 52, 60) + leaf(100, 118, 0, 26);
     } else {
-      plant = '<path d="M100 168V64" stroke="#1b8354" stroke-width="3.5" stroke-linecap="round" fill="none"/>' +
+      plant = '<path d="M100 168V64" stroke="' + INK + '" stroke-width="1.5" stroke-linecap="round" fill="none"/>' +
         leaf(100, 150, -58, 40) + leaf(100, 138, 58, 40) +
         leaf(100, 118, -52, 44) + leaf(100, 104, 52, 44) +
         leaf(100, 88, -46, 38) + leaf(100, 76, 46, 38) + leaf(100, 66, 0, 30);
     }
-    var diamonds = '';
-    [76, 92, 108, 124].forEach(function (cx, i) {
-      diamonds += '<path d="M' + cx + ' 197.5 ' + (cx + 6) + ' 203 ' + cx + ' 208.5 ' + (cx - 6) + ' 203Z" fill="' + (i % 2 ? '#f3ead8' : '#ba9863') + '"/>';
-    });
     var name = withName ?
-      '<text class="ph-name" x="100" y="40" text-anchor="middle" font-size="26">' + esc(p.name) + '</text>' +
-      '<path d="M78 52h44" stroke="#ba9863" stroke-width="2" stroke-linecap="round"/>' : '';
+      '<text class="ph-name" x="100" y="40" text-anchor="middle" font-size="22">' + esc(p.name) + '</text>' +
+      '<path d="M78 52h44" stroke="' + GOLD + '" stroke-width="1.5" stroke-linecap="round"/>' : '';
     return '<svg class="ph" viewBox="0 0 200 280" preserveAspectRatio="xMidYMid slice" role="img" aria-label="' + esc(p.name) + '">' +
-      '<circle cx="100" cy="150" r="86" fill="rgba(255,255,255,.35)"/>' +
-      '<ellipse cx="100" cy="249" rx="54" ry="7" fill="rgba(80,50,10,.12)"/>' +
+      '<path d="M0 262C50 252 90 258 130 250S180 246 200 244M0 272C50 262 90 268 130 260S180 256 200 254" stroke="' + GOLD + '" stroke-width="1.5" fill="none"/>' +
       plant +
-      '<path d="M58 178H142L132 244Q131 248 126 248H74Q69 248 68 244Z" fill="#c9703f"/>' +
-      '<rect x="52" y="166" width="96" height="16" rx="4" fill="#d98250"/>' +
-      '<path d="M60.7 196H139.3L137.2 210H62.8Z" fill="#4a1f10"/>' +
-      '<path d="M60.7 197H139.3M62.8 209H137.2" stroke="#ba9863" stroke-width="1"/>' + diamonds +
-      '<path d="M142 180 132 244Q131 248 126 248H116Q126 240 130 180Z" fill="rgba(0,0,0,.08)"/>' +
+      '<path d="M58 178H142L132 244Q131 248 126 248H74Q69 248 68 244Z" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-linejoin="round"/>' +
+      '<path d="M52 166H148V182H52Z" fill="none" stroke="' + INK + '" stroke-width="1.5" stroke-linejoin="round"/>' +
+      '<path d="M66 204h6v-5h6v-5h12v5h6v5h6M100 204h6v-5h6v-5h12v5h6v5h6" stroke="' + GOLD + '" stroke-width="1.5" fill="none" stroke-linejoin="miter" transform="translate(-6 8)"/>' +
       name + '</svg>';
   }
   function figure(p, opts) {
     opts = opts || {};
-    var cls = 'arch' + (p.image ? ' has-img' : '');
+    var cls = 'frame' + (p.image ? ' has-img' : '');
     var inner = p.image
       ? '<img src="' + esc(p.image) + '" alt="' + esc('شخصية نبتة ' + p.name) + '" ' + (opts.eager ? '' : 'loading="lazy" ') + 'decoding="async" width="683" height="1024">'
       : placeholder(p, opts.name);

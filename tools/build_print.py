@@ -13,7 +13,8 @@ import segno
 ROOT = Path(__file__).resolve().parent.parent
 BASE = "https://mselem0.github.io/alula-talking-plants/"
 ENTRANCE_URL = BASE + "?scan=1"
-DARK = "#104631"
+DARK = "#14332D"
+LIGHT = "#F8F4EF"
 ENTRANCE_CHARS = ["mint", "rosemary", "itra", "basil"]
 
 
@@ -28,7 +29,7 @@ def make_qr(url):
 def inline_svg(url, label):
     """Inline SVG with a white 4-module quiet zone, scalable by CSS."""
     buf = io.BytesIO()
-    make_qr(url).save(buf, kind="svg", dark=DARK, light="#ffffff", border=4, scale=1,
+    make_qr(url).save(buf, kind="svg", dark=DARK, light=LIGHT, border=4, scale=1,
                       xmldecl=False, svgns=True, nl=False, omitsize=True, svgclass="qr",
                       lineclass=None, svgid=None)
     return buf.getvalue().decode().replace("<svg ", f'<svg role="img" aria-label="{escape(label)}" ', 1)
@@ -36,7 +37,7 @@ def inline_svg(url, label):
 
 def file_svg(url, path):
     """Standalone downloadable SVG: white background, explicit width/height."""
-    make_qr(url).save(str(path), kind="svg", dark=DARK, light="#ffffff", border=4, scale=12,
+    make_qr(url).save(str(path), kind="svg", dark=DARK, light=LIGHT, border=4, scale=12,
                       xmldecl=True, svgns=True, nl=True)
 
 

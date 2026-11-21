@@ -7,7 +7,7 @@
 
   if (i < 0) {
     document.title = 'النبتة غير موجودة - حكايات الواحة';
-    app.innerHTML = '<div class="notfound"><div class="arch">' + O.placeholder({ name: '؟', cat: 'شتلات' }, false) + '</div>' +
+    app.innerHTML = '<div class="notfound"><div class="frame">' + O.placeholder({ name: '؟', cat: 'شتلات' }, false) + '</div>' +
       '<h1>لم نعثر على هذه النبتة</h1><p>قد يكون الرمز قديمًا أو الرابط غير مكتمل. تصفّح كل النباتات واختر حكايتك.</p>' +
       '<a class="btn primary" href="index.html#plants">' + O.icon('grid') + 'كل النباتات</a></div>';
     return;
@@ -45,6 +45,6 @@
   /* QR codes open this page directly: try to play now, show the tap-to-listen screen if blocked. */
   O.startWithGesture(api, {
     root: root, title: p.name, label: 'المس الشاشة لتسمع حكايتي', cta: 'المس الشاشة لتسمع حكايتي',
-    media: O.figure(p, { eager: true, name: false }).replace('class="arch', 'class="tts-arch arch')
+    media: O.figure(p, { eager: true, name: false }).replace('class="frame', 'class="tts-frame frame')
   });
 })();
