@@ -17,7 +17,7 @@
   document.title = p.name + ' - حكايات الواحة';
   app.innerHTML =
     '<div class="plant-grid">' +
-    '<div class="media">' + O.figure(p, { eager: true, name: true }) + '</div>' +
+    '<div class="media">' + O.figure(p, { eager: true, name: true, video: true }) + '</div>' +
     '<div class="body">' +
     '<div class="plant-meta"><h1>' + O.esc(p.name) + '</h1>' +
     (p.sci ? '<p class="sci">' + O.esc(p.sci) + '</p>' : '') +
@@ -30,7 +30,7 @@
     '<a class="all" href="index.html#plants">' + O.icon('grid') + 'كل النباتات</a></nav>' +
     '</div></div>';
   var root = document.getElementById('player');
-  var api = O.createPlayer(root, p);
+  var api = O.createPlayer(root, p, { video: app.querySelector('video.talk') });
   /* QR codes open this page directly: try to play now, show the tap-to-listen screen if blocked. */
   O.startWithGesture(api, {
     root: root, title: p.name, label: 'المس الشاشة لتسمع حكايتي', cta: 'المس الشاشة لتسمع حكايتي',

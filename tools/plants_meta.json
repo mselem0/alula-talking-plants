@@ -1,4 +1,9 @@
 {
+ "rosemary-video": {
+  "image": "img/rosemary-video.webp",
+  "sci": "Salvia rosmarinus",
+  "video": "video/rosemary-video.mp4"
+ },
  "date-palm": {
   "image": "img/date-palm.webp",
   "sci": "Phoenix dactylifera 'Barni'"
