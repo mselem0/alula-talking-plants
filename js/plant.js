@@ -34,7 +34,6 @@
     info('sprout', 'النوع', seeds ? 'بذور، تُزرع من البذرة' : 'شتلات، جاهزة للزراعة', 'wide') +
     '</div>' +
     '<div class="ask" aria-disabled="true"><span class="ic">' + O.icon('chat') + '</span><div><strong>اسأل النبتة <span class="soon">قريبًا</span></strong><small>قريبًا ستتمكّن من محادثة النبتة وطرح أسئلتك عليها.</small></div></div>' +
-    '<p class="review-note">المعلومات قيد المراجعة والاعتماد</p>' +
     '<nav class="pn" aria-label="التنقل بين النباتات">' +
     '<a class="prev" href="plant.html?p=' + encodeURIComponent(prev.id) + '" rel="prev">' + O.icon('prev') + '<span><small>السابقة</small>' + O.esc(prev.name) + '</span></a>' +
     '<a class="next" href="plant.html?p=' + encodeURIComponent(next.id) + '" rel="next"><span><small>التالية</small>' + O.esc(next.name) + '</span>' + O.icon('next') + '</a>' +

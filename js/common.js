@@ -61,7 +61,7 @@
     opts = opts || {};
     var cls = 'frame' + (p.image ? ' has-img' : '');
     var inner = (opts.video && p.video && p.image)
-      ? '<video class="talk" src="' + esc(p.video) + '" poster="' + esc(p.image) + '" muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-label="' + esc('شخصية نبتة ' + p.name + ' تتحدث') + '" width="600" height="900"></video>'
+      ? '<video class="talk" src="' + esc(p.video) + '" poster="' + esc(p.image) + '" playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-label="' + esc('شخصية نبتة ' + p.name + ' تتحدث') + '" width="600" height="900"></video>'
       : p.image
       ? '<img src="' + esc(p.image) + '" alt="' + esc('شخصية نبتة ' + p.name) + '" ' + (opts.eager ? '' : 'loading="lazy" ') + 'decoding="async" width="683" height="1024">'
       : placeholder(p, opts.name);
@@ -94,9 +94,10 @@
     var btn = root.querySelector('.pbtn'), range = root.querySelector('input'),
       cur = root.querySelector('.cur'), tot = root.querySelector('.tot'),
       box = root.querySelector('.transcript'), spans = root.querySelectorAll('.ph-s');
-    var audio = new Audio();
-    audio.preload = 'metadata';
-    audio.src = item.audio;
+    /* With a talking video, the video itself carries the voice and is the only clock: it plays
+       untouched and the transcript follows it. Otherwise a plain audio element is used. */
+    var audio = video || new Audio();
+    if (!video) { audio.preload = 'metadata'; audio.src = item.audio; }
     var idx = -1, raf = 0, dragging = false;
 
     function dur() { return isFinite(audio.duration) && audio.duration > 0 ? audio.duration : item.duration; }
@@ -125,19 +126,7 @@
       cur.textContent = fmt(t);
       if (!audio.paused || t > 0) setIdx(indexAt(t)); else setIdx(-1);
     }
-    /* The audio is the master clock; the muted lip-sync video follows it. */
-    function syncVideo(force) {
-      if (!video || video.seeking) return;
-      var d = audio.currentTime - video.currentTime;
-      if (force || Math.abs(d) > 0.35) {
-        try { video.currentTime = Math.min(audio.currentTime, (video.duration || 1e9) - 0.05); } catch (e) {}
-        video.playbackRate = 1;
-      } else if (!audio.paused) {
-        /* nudge small drift instead of seeking, so playback stays smooth */
-        video.playbackRate = Math.abs(d) < 0.04 ? 1 : (d > 0 ? 1.06 : 0.94);
-      }
-    }
-    function loop() { render(); syncVideo(false); if (!audio.paused) raf = requestAnimationFrame(loop); }
+    function loop() { render(); if (!audio.paused) raf = requestAnimationFrame(loop); }
 
     function setPlaying(on) {
       root.classList.toggle('is-playing', on);
@@ -158,14 +147,12 @@
       else audio.pause();
     });
     audio.addEventListener('play', function () { pauseOthers(); setPlaying(true); cancelAnimationFrame(raf); loop();
-      if (video) { syncVideo(true); var vp = video.play(); if (vp && vp.catch) vp.catch(function () {}); root.classList.add('has-video'); }
+      if (video) root.classList.add('has-video');
       if ('mediaSession' in navigator && window.MediaMetadata) {
         navigator.mediaSession.metadata = new MediaMetadata({ title: item.name, artist: 'حكايات الواحة' });
       } });
-    audio.addEventListener('pause', function () { setPlaying(false); cancelAnimationFrame(raf); render(); if (video) video.pause(); });
-    audio.addEventListener('ended', function () { setPlaying(false); cancelAnimationFrame(raf); audio.currentTime = 0; setIdx(-1); render();
-      if (video) { video.pause(); try { video.currentTime = 0; } catch (e) {} } });
-    audio.addEventListener('seeked', function () { syncVideo(true); });
+    audio.addEventListener('pause', function () { setPlaying(false); cancelAnimationFrame(raf); render(); });
+    audio.addEventListener('ended', function () { setPlaying(false); cancelAnimationFrame(raf); audio.currentTime = 0; setIdx(-1); render(); });
     audio.addEventListener('timeupdate', render);
     audio.addEventListener('loadedmetadata', function () { tot.textContent = fmt(dur()); });
     audio.addEventListener('error', function () { root.classList.add('has-error'); setPlaying(false); });

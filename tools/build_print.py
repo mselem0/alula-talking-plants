@@ -47,8 +47,7 @@ def load_plants():
     return sorted(json.loads(m.group(1)), key=lambda p: p["n"])
 
 
-FOOT = ('<div class="foot"><img src="img/rcu-logo-gold.svg" alt="الهيئة الملكية لمحافظة العلا">'
-        '<small>نسخة تجريبية</small></div>')
+FOOT = ('<div class="foot"><img src="img/rcu-logo-gold.svg" alt="الهيئة الملكية لمحافظة العلا"></div>')
 BAND = '<div class="band" aria-hidden="true"></div>'
 
 
