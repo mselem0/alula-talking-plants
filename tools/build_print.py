@@ -15,7 +15,7 @@ BASE = "https://mselem0.github.io/alula-talking-plants/"
 ENTRANCE_URL = BASE + "?scan=1"
 DARK = "#14332D"
 LIGHT = "#F8F4EF"
-ENTRANCE_CHARS = ["mint", "rosemary", "itra", "basil"]
+ENTRANCE_CHARS = ["date-palm", "rosemary", "henna", "tomato"]
 
 
 def plant_url(pid):
@@ -58,7 +58,7 @@ def plant_item(p):
     sheet = f'''<article class="sheet" aria-label="لافتة {name}">{BAND}
 <div class="top"><div class="proj">حكايات الواحة</div><div class="tag">لكل نبتة في العلا حكاية… امسح واستمع</div></div>
 <div class="body"><div class="char"><img src="img/{pid}.webp" alt="شخصية نبتة {name}"></div>
-<div class="txt"><h1>{name}</h1>{sci}<span class="cat">{escape(p["cat"])}</span><div class="cta">امسحني واستمع لحكايتي</div></div></div>
+<div class="txt"><h1>{name}</h1>{sci}<div class="cta">امسحني واستمع لحكايتي</div></div></div>
 <div class="mid"><div class="qrwrap">{qr}<p class="qrcap">وجّه كاميرا هاتفك نحو الرمز</p></div></div>
 {FOOT}{BAND}</article>'''
     stk = f'''<div class="stk" aria-label="ملصق {name}"><div class="sband" aria-hidden="true"></div>
@@ -103,8 +103,7 @@ def main():
                  '<path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span>')
     rows = [list_item("entrance", "لافتة المدخل العام", thumb=ent_thumb)]
     for p in plants:
-        extra = ('<span class="pending">هويتها بانتظار تأكيد العميل</span>' if p["id"] == "haboq" else "")
-        rows.append(list_item(p["id"], escape(p["name"]), extra))
+        rows.append(list_item(p["id"], escape(p["name"])))
     store = "\n".join([entrance_item()] + [plant_item(p) for p in plants])
 
     tpl = (ROOT / "tools/print_template.html").read_text(encoding="utf-8")

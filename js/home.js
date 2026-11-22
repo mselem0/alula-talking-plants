@@ -19,10 +19,5 @@
       (p.sci ? '<p class="sci">' + O.esc(p.sci) + '</p>' : '') +
       '<span class="hint"><span class="dot">' + O.icon('play') + '</span>اضغط للاستماع</span></a>';
   }
-  var seeds = window.PLANTS.filter(function (p) { return p.cat === 'بذور'; });
-  var seedlings = window.PLANTS.filter(function (p) { return p.cat === 'شتلات'; });
-  document.getElementById('g-seeds').innerHTML = seeds.map(card).join('');
-  document.getElementById('g-seedlings').innerHTML = seedlings.map(card).join('');
-  document.getElementById('c-seeds').textContent = seeds.length + ' نباتات';
-  document.getElementById('c-seedlings').textContent = seedlings.length + ' نباتات';
+  document.getElementById('grid').innerHTML = window.PLANTS.slice().sort(function (a, b) { return a.n - b.n; }).map(card).join('');
 })();

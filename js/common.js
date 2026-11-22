@@ -35,17 +35,10 @@
       '<path d="M0 0V' + (-len * 0.9).toFixed(1) + '" stroke="' + INK + '" stroke-width="1.5" fill="none"/></g>';
   }
   function placeholder(p, withName) {
-    var seeds = p.cat === 'بذور';
-    var plant;
-    if (seeds) {
-      plant = '<path d="M100 168V118" stroke="' + INK + '" stroke-width="1.5" stroke-linecap="round" fill="none"/>' +
-        leaf(100, 132, -52, 52) + leaf(100, 118, 52, 60) + leaf(100, 118, 0, 26);
-    } else {
-      plant = '<path d="M100 168V64" stroke="' + INK + '" stroke-width="1.5" stroke-linecap="round" fill="none"/>' +
-        leaf(100, 150, -58, 40) + leaf(100, 138, 58, 40) +
-        leaf(100, 118, -52, 44) + leaf(100, 104, 52, 44) +
-        leaf(100, 88, -46, 38) + leaf(100, 76, 46, 38) + leaf(100, 66, 0, 30);
-    }
+    var plant = '<path d="M100 168V64" stroke="' + INK + '" stroke-width="1.5" stroke-linecap="round" fill="none"/>' +
+      leaf(100, 150, -58, 40) + leaf(100, 138, 58, 40) +
+      leaf(100, 118, -52, 44) + leaf(100, 104, 52, 44) +
+      leaf(100, 88, -46, 38) + leaf(100, 76, 46, 38) + leaf(100, 66, 0, 30);
     var name = withName ?
       '<text class="ph-name" x="100" y="40" text-anchor="middle" font-size="22">' + esc(p.name) + '</text>' +
       '<path d="M78 52h44" stroke="' + GOLD + '" stroke-width="1.5" stroke-linecap="round"/>' : '';

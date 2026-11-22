@@ -1,139 +1,61 @@
 {
- "dill": {
-  "sci": "Anethum graveolens",
-  "sun": "يحب الشمس",
-  "water": "ماء باعتدال",
-  "uses": "السلطات والأرز والسمك",
-  "warning": false,
-  "image": "img/dill.webp"
+ "date-palm": {
+  "image": "img/date-palm.webp",
+  "sci": "Phoenix dactylifera 'Barni'"
  },
- "coriander": {
-  "sci": "Coriandrum sativum",
-  "sun": "يفضّل الجو المعتدل، ولا يحب الحر الشديد",
-  "water": "سقي معتدل",
-  "uses": "أوراق للأطباق والشوربة، وبذور للبهارات",
-  "warning": false,
-  "image": "img/coriander.webp"
+ "fig": {
+  "image": "img/fig.webp",
+  "sci": "Ficus carica"
  },
- "parsley": {
-  "sci": "Petroselinum crispum",
-  "sun": "شمس خفيفة",
-  "water": "سقي منتظم",
-  "uses": "السلطات وتزيين الأطباق",
-  "warning": false,
-  "image": "img/parsley.webp"
+ "mango": {
+  "image": "img/mango.webp",
+  "sci": "Mangifera indica"
  },
- "rocket": {
-  "sci": "Eruca vesicaria",
-  "sun": "شمس معتدلة",
-  "water": "سقي منتظم",
-  "uses": "السلطة والسمك والشطائر",
-  "warning": false,
-  "image": "img/rocket.webp"
+ "navel-orange": {
+  "image": "img/navel-orange.webp",
+  "sci": "Citrus sinensis 'Navel'"
  },
- "white-radish": {
-  "sci": "Raphanus sativus",
-  "sun": "شمس معتدلة",
-  "water": "تربة ناعمة رطبة",
-  "uses": "يُؤكل طازجًا، طعمه منعش",
-  "warning": false,
-  "image": "img/white-radish.webp"
+ "citron": {
+  "image": "img/citron.webp",
+  "sci": "Citrus medica"
  },
- "red-radish": {
-  "sci": "Raphanus sativus",
-  "sun": "جو لطيف",
-  "water": "سقي منتظم",
-  "uses": "يزيّن السفرة ويُؤكل طازجًا",
-  "warning": false,
-  "image": "img/red-radish.webp"
+ "sweet-lemon": {
+  "image": "img/sweet-lemon.webp",
+  "sci": "Citrus limetta"
  },
- "lettuce": {
-  "sci": "Lactuca sativa",
-  "sun": "يفضّل الجو البارد",
-  "water": "سقي منتظم",
-  "uses": "أوراق مقرمشة للسلطة",
-  "warning": false,
-  "image": "img/lettuce.webp"
+ "saffron": {
+  "image": "img/saffron.webp",
+  "sci": "Crocus sativus"
+ },
+ "tomato": {
+  "image": "img/tomato.webp",
+  "sci": "Solanum lycopersicum"
+ },
+ "hot-pepper": {
+  "image": "img/hot-pepper.webp",
+  "sci": "Capsicum annuum"
  },
  "rosemary": {
-  "sci": "Salvia rosmarinus",
-  "sun": "يحب الشمس",
-  "water": "قليل، في تربة لا يتجمّع فيها الماء",
-  "uses": "نكهة رائعة للمشويات",
-  "warning": false,
   "image": "img/rosemary.webp",
-  "video": "video/rosemary.mp4"
+  "sci": "Salvia rosmarinus"
  },
- "itra": {
-  "sci": "Pelargonium graveolens",
-  "sun": "يحب الشمس",
-  "water": "سقي معتدل، دون بقاء الجذور في الماء",
-  "uses": "رائحة زكية، وتُضاف أوراقها للشاي أحيانًا",
-  "warning": false,
-  "image": "img/itra.webp"
+ "moringa": {
+  "image": "img/moringa.webp",
+  "sci": "Moringa peregrina"
  },
- "mint": {
-  "sci": "Mentha spp.",
-  "sun": "ظل خفيف",
-  "water": "يحب الماء",
-  "uses": "الشاي بالنعناع والمشروبات المنعشة",
-  "warning": false,
-  "image": "img/mint.webp"
+ "grapevine": {
+  "image": "img/grapevine.webp",
+  "sci": "Vitis vinifera"
  },
- "sage": {
-  "sci": "Salvia officinalis",
-  "sun": "يحب الشمس",
-  "water": "قليل، فلا تُكثروا عليه السقي",
-  "uses": "تُضاف أوراقه إلى الشاي",
-  "warning": false,
-  "image": "img/sage.webp"
+ "seedlings": {
+  "image": "img/seedlings.webp"
  },
- "basil": {
-  "sci": "Ocimum basilicum",
-  "sun": "يحب الدفء والشمس، ولا يحب البرد",
-  "water": "سقي معتدل",
-  "uses": "أوراق عطرية زكية للمطبخ",
-  "warning": false,
-  "image": "img/basil.webp"
+ "henna": {
+  "image": "img/henna.webp",
+  "sci": "Lawsonia inermis"
  },
- "red-basil": {
-  "sci": "Ocimum basilicum 'Purpurascens'",
-  "sun": "يحب الشمس",
-  "water": "سقي معتدل",
-  "uses": "رائحة عطرية ولون مميز للحديقة والأطباق",
-  "warning": false,
-  "image": "img/red-basil.webp"
- },
- "shathab": {
-  "sci": "Ruta chalepensis",
-  "sun": "يتحمّل الشمس والدفء",
-  "water": "سقي قليل",
-  "uses": "للنظر فقط، لا تلمس ولا تتذوق",
-  "warning": true,
-  "image": "img/shathab.webp"
- },
- "shih": {
-  "sci": "Artemisia sp.",
-  "sun": "يتحمّل الحرارة والشمس",
-  "water": "قليل جدًا، يتحمّل قلة الماء",
-  "uses": "للنظر والرائحة فقط، لا للتذوق",
-  "warning": true,
-  "image": "img/shih.webp"
- },
- "wild-thyme": {
-  "sci": "Thymus serpyllum",
-  "sun": "أماكن مشمسة",
-  "water": "قليل، في تربة جافة",
-  "uses": "نبتة عطرية، وأزهارها يحبها النحل",
-  "warning": false,
-  "image": "img/wild-thyme.webp"
- },
- "haboq": {
-  "sci": "",
-  "sun": "شمس خفيفة",
-  "water": "يحب الماء",
-  "uses": "يُضاف إلى الشاي بنكهة خاصة",
-  "warning": false,
-  "image": "img/haboq.webp"
+ "hibiscus": {
+  "image": "img/hibiscus.webp",
+  "sci": "Hibiscus sabdariffa"
  }
 }
